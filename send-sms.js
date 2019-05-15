@@ -16,12 +16,15 @@ app.listen(port, function(){
 });
 
 app.post('/api/messages', (req, res) => {
+    let toPhone = req.body.toPhone ? req.body.toPhone : process.env.MY_PHONE_NUMBER
+    let fromPhone = req.body.fromPhone ? req.body.fromPhone : process.env.TWILIO_PHONE_NUMBER
+    let message = req.body.message ? req.body.message : "whenIneedU is here for you -- standard message"
     res.header('Content-Type', 'application/json');
     client.messages
       .create({
-        from: process.env.TWILIO_PHONE_NUMBER,
-        to: process.env.MY_PHONE_NUMBER,
-        body: "whenIneedU is here for you -- standard message"
+        from: fromPhone,
+        to: toPhone,
+        body: message
     })
     .then(() => {
         res.send(JSON.stringify({ success: true }));
